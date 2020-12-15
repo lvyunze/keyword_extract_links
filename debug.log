@@ -1,0 +1,15 @@
+Source path:... D:\project\pythonProject\keyword_extract_links\main.py
+Starting var:.. self = <main.Start object at 0x000001BCEC8D1518>
+Starting var:.. keyword = '易次元'
+Starting var:.. args = (['https://tieba.baidu.com/f/search/res?ie=utf-8...net/search/home?k=%E6%98%93%E6%AC%A1%E5%85%83'],)
+17:22:23.981356 call       219     def run(self, keyword, *args):
+17:22:24.002345 line       220         address_list = args[0]
+New var:....... address_list = ['https://tieba.baidu.com/f/search/res?ie=utf-8&...y.net/search/home?k=%E6%98%93%E6%AC%A1%E5%85%83']
+17:22:24.003343 line       221         address_name = {
+17:22:24.006342 line       222           name: "" for name in address_list
+New var:....... address_name = {'https://tieba.baidu.com/f/search/res?ie=utf-8&...t/search/home?k=%E6%98%93%E6%AC%A1%E5%85%83': ''}
+17:22:24.006342 line       224         asyncio.get_event_loop().run_until_complete(self.main(keyword, address_name))
+17:22:24.010340 exception  224         asyncio.get_event_loop().run_until_complete(self.main(keyword, address_name))
+Exception:..... TypeError: Argument self must be <class 'str'>
+Call ended by exception
+Elapsed time: 00:00:00.031982
