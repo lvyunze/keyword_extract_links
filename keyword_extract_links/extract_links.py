@@ -20,7 +20,6 @@ class Extract(object):
         tree = etree.HTML(self.html)
         return tree
 
-    # @typeassert(str)
     def get_url_font_website(self) -> tuple:
         """
         :判断是https还是http，还有网址，方便补齐链接
@@ -33,7 +32,6 @@ class Extract(object):
             return 'https', website
         return 'http', website
 
-    # @typeassert(str)
     @staticmethod
     def judge_u_and_num(url: str) -> bool:
         # 判断第一种情况
@@ -47,7 +45,6 @@ class Extract(object):
         except AttributeError:
             return True
 
-    # @typeassert(str, str)
     @staticmethod
     def judge_other_china_str(url: str, keyword: str) -> bool:
         # 判断第二种情况
@@ -61,7 +58,6 @@ class Extract(object):
         except AttributeError:
             return True
 
-    # @typeassert(list, str)
     def remove_useless_links(self, links: list, keyword: str) -> list:
         """
         去除无用链接，考虑情况如下：
@@ -72,8 +68,7 @@ class Extract(object):
         new_links = [url for url in new_links if self.judge_other_china_str(url, keyword)]
         return new_links
 
-    # @typeassert(str, str, str)
-    def get_url(self) -> list:
+    def get_url_list(self) -> list:
         # 搜索title系列：//a[contains(@title, "易次元")]/@href
         """
         判断标准：

@@ -2,13 +2,8 @@ from lxml import etree
 import asyncio
 from pyppeteer import launch
 from collections import Counter
-import random
 from urllib.parse import unquote
-import time
 import re
-from retrying import retry
-from typing import Any
-from public import typeassert
 import pysnooper
 
 
@@ -23,11 +18,12 @@ async def create_page(url_address: str, browser_obj):
 
 
 class Extract(object):
-    __slots__ = ['browser', 'keyword']
+    __slots__ = ['browser', 'keyword', 'url_list']
 
     def __init__(self, browser, keyword):
         self.browser = browser
         self.keyword = keyword
+        self.url_list = None
 
     @staticmethod
     def get_xpath_content(html: str):
@@ -39,8 +35,9 @@ class Extract(object):
         tree = etree.HTML(html)
         return tree
 
-    @typeassert(str)
-    def get_url_font_website(self, url: str) -> tuple:
+    # @typeassert(str)
+    @staticmethod
+    def get_url_font_website(url: str) -> tuple:
         """
         :判断是https还是http，还有网址，方便补齐链接
         """
@@ -52,8 +49,8 @@ class Extract(object):
             return 'https', website
         return 'http', website
 
-    # @typeassert(str)
-    def judge_u_and_num(self, url: str) -> bool:
+    @staticmethod
+    def judge_u_and_num(url: str) -> bool:
         # 判断第一种情况
         try:
             rule = re.search(r"/u/+\d+", url).group()
@@ -65,8 +62,8 @@ class Extract(object):
         except AttributeError:
             return True
 
-    # @typeassert(str, str)
-    def judge_other_china_str(self, url: str, keyword: str) -> bool:
+    @staticmethod
+    def judge_other_china_str(url: str, keyword: str) -> bool:
         # 判断第二种情况
         eachvalue = unquote(url, encoding='utf8')
         try:
@@ -78,7 +75,6 @@ class Extract(object):
         except AttributeError:
             return True
 
-    # @typeassert(list, str)
     def remove_useless_links(self, links: list, keyword: str) -> list:
         """
         去除无用链接，考虑情况如下：
@@ -89,7 +85,6 @@ class Extract(object):
         new_links = [url for url in new_links if self.judge_other_china_str(url, keyword)]
         return new_links
 
-    # @typeassert(str, str, str)
     def get_url(self, start_url: str, html: str, keyword: str) -> list:
         # 搜索title系列：//a[contains(@title, "易次元")]/@href
         """
@@ -160,8 +155,10 @@ class Extract(object):
                 url_list.remove(url_address)
             except ValueError:
                 pass
+
             print(url_list)
             print(len(url_list))
+            self.url_list = url_list
             url_list_value = address_name[url_address]
             new_value = [url for url in url_list if url not in url_list_value]
             if new_value:
@@ -175,6 +172,9 @@ class Extract(object):
                 # log.logger.warning(f"网址：{url_address}监控到无新链接添加")
 
             # log.logger.warning(f"网址：{url_address}包含的关键字链接列表为:{url_list}")
+    @property
+    def get_url_list(self):
+        return self.url_list
 
 
 class Start(object):

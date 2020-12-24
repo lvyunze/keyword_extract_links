@@ -15,8 +15,8 @@
 # data = 'https://weibo.com/u/'
 # x = re.search(r"/u/+\d+", data).group()
 # print(x)
-from main import Start
-from ip import proxy_list_new
+from demo.main import Start
+
 start = Start()
 address_list = [
     # "https://s.weibo.com/weibo?q=%E6%98%93%E6%AC%A1%E5%85%83&Refer=STopic_history",
